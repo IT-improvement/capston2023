@@ -1,0 +1,104 @@
+@charset "EUC-KR";
+body {margin: 0; 
+
+
+}
+.main-content container{max-width: 1600px; margin: 0 auto;}
+#reference_list {display: flex; flex-wrap: wrap; }
+#reference_list   > div { vertical-align:right; margin: 0 .5rem;}
+table {display: table; width: 120%; max-width: 120%; border: 1px solid #ddd;}
+table> thead > tr > th {border: 1px solid #ddd; text-align: center;}
+table> tbody > tr > td {border: 1px solid #ddd; text-align: center;}
+input[type="submit"] {
+  background-color: #05cc7c; 
+  color: #fff;     
+  border: none;
+  padding: 10px 15px; 
+  font-size: 10px;
+  font-weight: bold; 
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  float: center;
+}
+
+.future-button {
+  background-color: #05cc7c; 
+  color: #fff;
+  border: none;
+  padding: 5px 10px; 
+  font-size: 10px;
+  font-weight: bold; 
+  border-radius: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+button {
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #4caf50;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
+
+.future-button:hover {
+  background-color: rgba(44, 193, 133, 0.4);
+}
+.movePage{
+  width: 300px; height: 210px;
+  position: absolute;
+  left: 50px;
+  
+}
+.movePage1{
+  width: 300px; height: 250px;
+  position: absolute;
+  left: 50px;
+}
+.left > input{
+  width: 20px; height: 20px;
+  color: red;
+  padding: 10px 10px 10px 10px;
+}
+.right > input{
+  width: 20px; height: 20px;
+  color: red;
+  padding: 10px 10px 10px 10px;
+}
+.left{
+  width: 50%;
+  float: left;
+  box-sizing: border-box;
+  font-size: 25px;
+  text-align: left;
+  padding: 10px 10px 10px 10px;
+  
+}
+.right{
+  width: 50%;
+  float: right;
+  box-sizing: border-box;
+  font-size: 25px;
+  text-align: left;
+  padding: 10px 10px 10px 10px;
+}
+.title{
+  padding: 10px 10px 10px 10px;
+  font-size: 20px;
+  width: 100%;
+  text-align: center;
+}
+.movebtn{
+  width: 90%;
+  margin: auto;
+  display: block;
+  
+}
+

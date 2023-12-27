@@ -1,0 +1,8 @@
+@charset "utf-8";
+.createRoomBtn{
+  position: absolute;
+  left: 92%;
+}
+.form-check{
+  margin: 2px;
+}

@@ -1,0 +1,29 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: url("loginimg.jpg") no-repeat center;
+    background-size: cover;
+}
+.highlighted{
+    font-size: 20px;
+    font-weight: 300;
+}
+.double_id{
+	background : #2cc185;
+   position: absolute;
+   width: 25%;
+   height: 40px;
+   top:10%;
+    right:0%;
+   border-radius :12px;
+   border: none;
+}
+.submit_button{
+    border-radius :12px; 
+    border: none;
+}
+.double_id:hover, .submit_button:hover{
+    background: #27ac77;
+}

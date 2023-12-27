@@ -1,0 +1,61 @@
+@charset "utf-8";
+.container-fluid {
+  
+  height: 1140px;
+}
+.bigFild {
+  
+  height: 95%;
+  margin: 5px;
+}
+
+.leftFild {
+  
+  height: 99%;
+  width: 45%;
+  margin: 1px;
+}
+.rightFild {
+  
+  height: 99%;
+  width: 45%;
+  margin: 1px;
+}
+#codeTxt{
+  height: 99%;
+}
+#comfileTxt{
+  height: 52%;
+  background-color: black;
+}
+.userFild{
+  height: 5%;
+}
+.user1fig,
+.user2fig,
+.user3fig,
+.user4fig{
+  margin: 5px;
+}
+.chatFild{
+  height: 32%;
+}
+#chatOutputTxt{
+  height: 99%;
+}
+.chatBtnFild{
+  height: 19%;
+}
+.chatSendBtn{
+  position: absolute;
+  translate: middle;
+  width: 6%;
+  margin: 2px;
+}
+#chatInputTxt{
+  margin: 2px;
+}
+.roomOutBtn{
+	position: absolute;
+	left: 90%;
+}
