@@ -1,0 +1,274 @@
+
+CREATE DATABASE capston;
+
+use capston;
+
+CREATE TABLE user(
+id VARCHAR(200) NOT NULL PRIMARY KEY COLLATE 'utf8mb3_general_ci',	
+pwd VARCHAR(20) NOT NULL COLLATE 'utf8mb3_general_ci',
+email VARCHAR(200) NOT NULL COLLATE 'utf8mb3_general_ci',
+phoneNum VARCHAR(20) NOT NULL,
+zipcode VARCHAR(20) NOT NULL,
+address VARCHAR(200) NOT NULL COLLATE 'utf8mb3_general_ci',
+question VARCHAR(100) NOT NULL COLLATE 'utf8mb3_general_ci',
+answer VARCHAR(200) NOT NULL COLLATE 'utf8mb3_general_ci',
+logInfo TINYINT(1) NOT NULL DEFAULT '0',
+solveNum INT  NOT NULL DEFAULT '0',
+comFile INT NOT NULL NOT NULL DEFAULT '0'
+)COLLATE='utf8mb3_general_ci' ENGINE=InnoDB;
+
+CREATE TABLE `question` (
+	`q_num` INT NOT NULL AUTO_INCREMENT PRIMARY key,
+	`q_level` VARCHAR(5) NOT NULL,
+	`q_title` VARCHAR(45) NOT NULL,
+	`q_language` VARCHAR(45) NOT NULL,
+	`q_info` TEXT NOT NULL,
+	`q_condition` TEXT,
+	`q_anwserpercent` VARCHAR(45) NOT NULL,
+	`company` VARCHAR(45),
+	`visitCount` INT NULL DEFAULT '0'
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE mvcboard (
+    idx INT(11) NOT NULL AUTO_INCREMENT,
+    name VARCHAR(50) NOT NULL DEFAULT '관리자' COLLATE 'utf8mb3_general_ci',
+    title VARCHAR(200) NOT NULL COLLATE 'utf8mb3_general_ci',
+    content VARCHAR(2000) NOT NULL COLLATE 'utf8mb3_general_ci',
+    postdate DATETIME NOT NULL DEFAULT current_timestamp(),
+    visitcount INT(11) NOT NULL DEFAULT '0',
+    PRIMARY KEY (idx) USING BTREE
+)
+COLLATE='utf8mb3_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=18
+;
+
+CREATE TABLE ChatRoom (
+   roomTitle VARCHAR(45) NOT NULL PRIMARY KEY COLLATE 'utf8mb3_general_ci',
+   createTime TIMESTAMP NOT NULL,
+    language VARCHAR(45) NOT NULL COLLATE 'utf8mb3_general_ci',
+   allowMem INT NOT NULL,
+   roomPwd VARCHAR(45) COLLATE 'utf8mb3_general_ci',
+   id VARCHAR(16) NOT NULL COLLATE 'utf8mb3_general_ci',
+    statusMem INT NOT NULL,
+   FOREIGN KEY(id) REFERENCES USER(id)
+)COLLATE='utf8mb3_general_ci' ENGINE=INNODB;
+
+CREATE TABLE `videos` (
+	`num` INT(11) NOT NULL AUTO_INCREMENT,
+	`video_num` INT NOT NULL,
+	`vTitle` VARCHAR(40) NOT NULL,
+	`language` VARCHAR(20) NOT NULL,
+	`playNum` INT(11) NOT NULL,
+	`url` VARCHAR(200) NOT NULL,
+	PRIMARY KEY (`num`)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `answerUserInfo` (
+	`answer_num` INT NOT NULL AUTO_INCREMENT PRIMARY key,
+	`comFileNum` int NOT NULL,
+	`error` int NOT NULL,
+	`q_answer`  TINYINT NOT NULL DEFAULT '0',
+	`q_num` int NOT NULL,
+	`id` VARCHAR(16) NOT NULL,
+	foreign key(q_num) references question(q_num),
+	foreign key(id) references user(id)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `logfile` (
+	`log_num` INT(11) NOT NULL AUTO_INCREMENT,
+	`logDate` TIMESTAMP NULL DEFAULT NULL,
+	`logOutDate` TIMESTAMP NULL DEFAULT NULL,
+	`id` VARCHAR(16) NOT NULL COLLATE 'utf8mb3_general_ci',
+	PRIMARY KEY (`log_num`) USING BTREE,
+	INDEX `id` (`id`) USING BTREE,
+	CONSTRAINT `logfile_ibfk_1` FOREIGN KEY (`id`) REFERENCES `capston`.`user` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)
+COLLATE='utf8mb3_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=14
+;
+
+
+CREATE TABLE chatFile
+(
+chatFile_num INT NOT NULL AUTO_INCREMENT PRIMARY key,
+roomTitle VARCHAR(45) NOT NULL,
+FOREIGN KEY(roomTitle) REFERENCES chatroom(roomTitle),
+chatDate TIMESTAMP not null,
+content TEXT not null
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `studylist` (
+	`num` INT NOT NULL AUTO_INCREMENT PRIMARY key,
+	`study_num` int NOT NULL,
+	`title` VARCHAR(40) NOT NULL,
+	`language`  VARCHAR(40) NOT NULL,
+	`contents` VARCHAR(200) NOT NULL,
+	`visitCount` int NOT NULL,
+	`createTime` TIMESTAMP NOT NULL,
+	`userID` VARCHAR(16) NOT NULL,
+	foreign key(userID) references user(id)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+
+CREATE TABLE ShowMatterList (
+  SMNUm INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  stnum INT NOT NULL,
+  id VARCHAR(16) NOT NULL,
+  title VARCHAR(40) NOT NULL,
+  contents VARCHAR(200) NOT NULL,
+  createtime TIMESTAMP NOT NULL,
+  FOREIGN KEY (id) REFERENCES `user` (`id`),
+  FOREIGN KEY (stnum) REFERENCES studylist(num)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+CREATE TABLE `language` (
+	`language_num` INT(11) NOT NULL AUTO_INCREMENT,
+	`id` VARCHAR(16) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`lan` VARCHAR(50) NOT NULL COLLATE 'utf8mb3_general_ci',
+	`correct_problems` INT(11) NULL DEFAULT NULL,
+	`wrong_problems1` INT(11) NULL DEFAULT NULL,
+	`time_exceeded` INT(11) NULL DEFAULT NULL,
+	`compile_errors` INT(11) NULL DEFAULT NULL,
+	PRIMARY KEY (`language_num`) USING BTREE,
+	INDEX `id` (`id`) USING BTREE,
+	CONSTRAINT `language_ibfk_1` FOREIGN KEY (`id`) REFERENCES `capston`.`user` (`id`) ON UPDATE RESTRICT ON DELETE RESTRICT
+)COLLATE='utf8mb3_general_ci' ENGINE=InnoDB;
+
+CREATE TABLE `past_q` (
+	`past_num` INT(11) NOT NULL AUTO_INCREMENT,
+	`past_title` VARCHAR(100) NOT NULL COLLATE 'utf8mb3_general_ci',
+	PRIMARY KEY (`past_num`) USING BTREE
+)COLLATE='utf8mb3_general_ci' ENGINE=InnoDB AUTO_INCREMENT=5;
+
+CREATE TABLE `userQuestion`(
+	`num` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	id VARCHAR(16) NOT NULL,
+	`q_num` INT NOT NULL,
+	`visitTime` TIMESTAMP ,
+	foreign key(id) references user(id),
+	foreign key(q_num) references question(q_num)
+)ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=UTF8;
+
+CREATE TABLE chatvisit(
+    visit_num INT NOT NULL PRIMARY KEY,
+    id VARCHAR(16) NOT NULL COLLATE 'utf8mb3_general_ci',
+    roomTitle VARCHAR(45) NOT NULL COLLATE 'utf8mb3_general_ci',
+    FOREIGN KEY(id) REFERENCES user(id),
+    FOREIGN KEY(roomTitle) REFERENCES chatroom(roomTitle) 
+)COLLATE='utf8mb3_general_ci' ENGINE=INNODB;
+
+CREATE TABLE Visit (
+  visitNum INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  q_num INT NOT NULL ,
+  Id VARCHAR(16) NOT NULL COLLATE 'utf8mb3_general_ci',
+  visitTime TIMESTAMP NOT NULL,
+  FOREIGN KEY (q_num) REFERENCES question(q_num),
+  FOREIGN KEY (Id) REFERENCES user(Id)
+)COLLATE='utf8mb3_general_ci'
+ENGINE=InnoDB
+;
+
+INSERT INTO past_q (past_title) VALUES ('2022 카카오 신입 공채 1차 온라인 코딩테스트 기출 문제');
+
+INSERT INTO past_q (past_title) VALUES ('2022 2차 KT 신입 SW 개발자 코딩테스트');
+
+INSERT INTO past_q (past_title) VALUES ('2022 1차 KT 신입 SW 개발자 코딩테스트');
+
+INSERT INTO past_q (past_title) VALUES ('삼성 SW 역량 테스트 기출 문제');
+
+
+INSERT INTO user (id, pwd, email, phoneNum,solveNum ,comFile, zipcode, address, question, answer) VALUES ('ccc', '123', '123','01098290493' ,'16', '123', '123','123','123','123');
+INSERT INTO user (id, pwd, email, phoneNum,solveNum ,comFile, zipcode, address, question, answer) VALUES ('123', '123', '123','01098290493' ,'16', '123', '123','123','123','123');
+INSERT INTO user (id, pwd, email, phoneNum,solveNum, comFile, zipcode, address, question, answer) VALUES ('aaa','1212','1','01050209815','21','111', '123','123','123','123');
+INSERT INTO user (id, pwd, email, phoneNum,solveNum, comFile, zipcode, address, question, answer) VALUES ('bbb','1212','1','01012345678','44','111', '123','123','123','123');
+
+INSERT INTO `language` (`id`, `lan`, `correct_problems`, `wrong_problems1`, `time_exceeded`, `compile_errors`)
+VALUES ('aaa', 'C#', 10, 5, 2, 1);
+INSERT INTO `language` (`id`, `lan`, `correct_problems`, `wrong_problems1`, `time_exceeded`, `compile_errors`)
+VALUES ('aaa', 'Java', 20, 10, 4, 2);
+INSERT INTO `language` (`id`, `lan`, `correct_problems`, `wrong_problems1`, `time_exceeded`, `compile_errors`)
+VALUES ('aaa', 'Python', 40, 15, 4, 3);
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_anwserpercent`) VALUES ('1', 'A+B', 'JAVA', '두 정수 A와 B를 입력받은 다음, A+B를 출력하는 프로그램을 작성하시오.', '39');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '구구단', 'JAVA', 'N을 입력받은 뒤, 구구단 N단을 출력하는 프로그램을 작성하시오. 출력 형식에 맞춰서 출력하면 된다.', '첫째 줄에 N이 주어진다. N은 1보다 크거나 같고, 9보다 작거나 같다.', '50');
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '별 찍기 -1', 'JAVA', '첫째 줄에는 별 1개, 둘째 줄에는 별 2개, N번째 줄에는 별 N개를 찍는 문제', '첫째 줄에 N(1 ≤ N ≤ 100)이 주어진다.', '50');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '시험점수', 'JAVA', '시험 점수를 입력받아 90 ~ 100점은 A, 80 ~ 89점은 B, 70 ~ 79점은 C, 60 ~ 69점은 D, 나머지 점수는 F를 출력하는 프로그램을 작성하시오.', '첫째 줄에 시험 점수가 주어진다. 시험 점수는 0보다 크거나 같고, 100보다 작거나 같은 정수이다.', '54');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '약수들의 합', 'JAVA', '어떤 숫자 n이 자신을 제외한 모든 약수들의 합과 같으면, 그 수를 완전수라고 한다.
+
+예를 들어 6은 6 = 1 + 2 + 3 으로 완전수이다.
+
+n이 완전수인지 아닌지 판단해주는 프로그램을 작성하라.', '입력은 테스트 케이스마다 한 줄 간격으로 n이 주어진다. (2 < n < 100,000)
+
+입력의 마지막엔 -1이 주어진다.', '52');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '별 찍기 -1', 'JAVA', '첫째 줄에는 별 1개, 둘째 줄에는 별 2개, N번째 줄에는 별 N개를 찍는 문제', '첫째 줄에 N(1 ≤ N ≤ 100)이 주어진다.', '50');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', 'A+B', 'C', '두 정수 A와 B를 입력받은 다음, A+B를 출력하는 프로그램을 작성하시오.', '첫째 줄에 A와 B가 주어진다. (0 < A, B < 10)', '40');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '구구단', 'C', 'N을 입력받은 뒤, 구구단 N단을 출력하는 프로그램을 작성하시오.', '첫째 줄에 N이 주어진다. N은 1보다 크거나 같고, 9보다 작거나 같다. N*1부터 N*9까지 출력한다.', '50');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '사칙연산', 'C', '두 자연수 A와 B가 주어진다. 이때, A+B, A-B, A*B, A/B(몫), A%B(나머지)를 출력하는 프로그램을 작성하시오. ', '두 자연수 A와 B가 주어진다. (1 ≤ A, B ≤ 10,000) 첫째 줄에 A+B, 둘째 줄에 A-B, 셋째 줄에 A*B, 넷째 줄에 A/B, 다섯째 줄에 A%B를 출력한다.', '45');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '두 번째로 큰 정수', 'C', '세 정수 A, B, C가 주어진다. 이때, 두 번째로 큰 정수를 출력하는 프로그램을 작성하시오.', '첫째 줄에 세 정수 A, B, C가 공백으로 구분되어 주어진다. (1 ≤ A, B, C ≤ 100)', '49');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '1부터 n까지의 합', 'C', 'n이 주어졌을 때, 1부터 n까지 합을 구하는 프로그램을 작성하시오.', '첫째 줄에 n (1 ≤ n ≤ 10,000)이 주어진다.', '65');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '1부터 n까지의 합', 'C#', 'n이 주어졌을 때, 1부터 n까지 합을 구하는 프로그램을 작성하시오.', '첫째 줄에 n (1 ≤ n ≤ 10,000)이 주어진다.', '65');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '구구단', 'C#', 'N을 입력받은 뒤, 구구단 N단을 출력하는 프로그램을 작성하시오.', '첫째 줄에 N이 주어진다. N은 1보다 크거나 같고, 9보다 작거나 같다. N*1부터 N*9까지 출력한다.', '50');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '시험점수', 'C#', '시험 점수를 입력받아 90 ~ 100점은 A, 80 ~ 89점은 B, 70 ~ 79점은 C, 60 ~ 69점은 D, 나머지 점수는 F를 출력하는 프로그램을 작성하시오.', '첫째 줄에 시험 점수가 주어진다. 시험 점수는 0보다 크거나 같고, 100보다 작거나 같은 정수이다.', '54');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '별 찍기 -1', 'C#', '첫째 줄에는 별 1개, 둘째 줄에는 별 2개, N번째 줄에는 별 N개를 찍는 문제', '첫째 줄에 N(1 ≤ N ≤ 100)이 주어진다.', '50');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '가장 큰 정수', 'C#', '세 정수 A, B, C가 주어진다. 이때, 가장 큰 정수를 출력하는 프로그램을 작성하시오.', '첫째 줄에 세 정수 A, B, C가 공백으로 구분되어 주어진다. (1 ≤ A, B, C ≤ 100)', '49');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', 'A-B', 'Python', '두 정수 A와 B를 입력받은 다음, A-B를 출력하는 프로그램을 작성하시오.', '첫째 줄에 A와 B가 주어진다. (0 < A, B < 10)', '70');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '오늘 날짜', 'Python', '서울의 오늘 날짜를 출력하는 프로그램을 작성하시오.', '서울의 오늘 날짜를 "YYYY-MM-DD" 형식으로 출력한다.', '55');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '윤년', 'Python', '연도가 주어졌을 때, 윤년이면 1, 아니면 0을 출력하는 프로그램을 작성하시오.
+
+윤년은 연도가 4의 배수이면서, 100의 배수가 아닐 때 또는 400의 배수일 때이다.
+
+예를 들어, 2012년은 4의 배수이면서 100의 배수가 아니라서 윤년이다. 1900년은 100의 배수이고 400의 배수는 아니기 때문에 윤년이 아니다. 하지만, 2000년은 400의 배수이기 때문에 윤년이다.', '첫째 줄에 연도가 주어진다. 연도는 1보다 크거나 같고, 4000보다 작거나 같은 자연수이다.', '52');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '두 수의 합 테스트 케이스 출력', 'Python', '두 정수 A와 B를 입력받은 다음, A+B를 출력하는 프로그램을 작성하시오.', '첫째 줄에 테스트 케이스의 개수 T가 주어진다.
+
+각 테스트 케이스는 한 줄로 이루어져 있으며, 각 줄에 A와 B가 주어진다. (0 < A, B < 10)', '49');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '가장 작은 정수', 'Python', '세 정수 A, B, C가 주어진다. 이때, 가장 작은 정수를 출력하는 프로그램을 작성하시오.', '첫째 줄에 세 정수 A, B, C가 공백으로 구분되어 주어진다. (1 ≤ A, B, C ≤ 100)', '49');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '인기있는 아이스크림', 'SQL', '상반기에 판매된 아이스크림의 맛을 총주문량을 기준으로 내림차순 정렬하고 총주문량이 같다면 출하 번호를 기준으로 오름차순 정렬하여 조회하는 SQL 문을 작성해주세요.', 'FIRST_HALF 테이블은 아이스크림 가게의 상반기 주문 정보를 담은 테이블입니다. 
+FIRST_HALF 테이블 구조는 다음과 같으며, 
+SHIPMENT_ID, FLAVOR, TOTAL_ORDER는 각각 아이스크림 공장에서 아이스크림 가게까지의 출하 번호, 아이스크림 맛, 상반기 아이스크림 총주문량을 나타냅니다.', '49');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', '인기있는 아이스크림', 'SQL', '상반기에 판매된 아이스크림의 맛을 총주문량을 기준으로 내림차순 정렬하고 총주문량이 같다면 출하 번호를 기준으로 오름차순 정렬하여 조회하는 SQL 문을 작성해주세요.', 'FIRST_HALF 테이블은 아이스크림 가게의 상반기 주문 정보를 담은 테이블입니다. 
+FIRST_HALF 테이블 구조는 다음과 같으며, 
+SHIPMENT_ID, FLAVOR, TOTAL_ORDER는 각각 아이스크림 공장에서 아이스크림 가게까지의 출하 번호, 아이스크림 맛, 상반기 아이스크림 총주문량을 나타냅니다.', '49');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', 'SELECT', 'SQL', '모든 극장의 이름과 위치를 조회하는 SQL문을 작성하시오.', '극장  테이블은 극장의 번호, 이름, 위치 정보를 담은 테이블입니다. 
+극장 테이블 구조는 다음과 같으며, 
+극장번호, 극장이름, 위치는 각각 극장에서 극장의 번호, 극장의 이름, 극장의 위치를 나타냅니다.', '70');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', 'WHERE', 'SQL', '잠실에 있는 극장 정보를 조회하는 SQL문을 작성하시오.', '극장  테이블은 극장의 번호, 이름, 위치 정보를 담은 테이블입니다. 
+극장 테이블 구조는 다음과 같으며, 
+극장번호, 극장이름, 위치는 각각 극장에서 극장의 번호, 극장의 이름, 극장의 위치를 나타냅니다.', '70');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', 'COUNT', 'SQL', '잠실에 있는 극장의 수를 조회하는 SQL문을 작성하시오.', '극장  테이블은 극장의 번호, 이름, 위치 정보를 담은 테이블입니다. 
+극장 테이블 구조는 다음과 같으며, 
+극장번호, 극장이름, 위치는 각각 극장에서 극장의 번호, 극장의 이름, 극장의 위치를 나타냅니다.', '62');
+
+INSERT INTO `capston`.`question` (`q_level`, `q_title`, `q_language`, `q_info`, `q_condition`, `q_anwserpercent`) VALUES ('1', 'COUNT', 'SQL', '극장별 상영관 수를 조회하는 SQL문을 작성하시오.', '상영관  테이블은 극장번호, 상영관번호, 영화제목, 가격, 좌석수 정보를 담은 테이블입니다. 
+극장 테이블 구조는 다음과 같으며, 
+극장번호, 상영관번호, 영화제목, 가격, 좌석수는 각각 극장에서 극장의 번호, 상영관의 번호, 영화의 제목, 영화의 가격, 상영관의 좌석수를 나타냅니다.', '52');
+
+
+
